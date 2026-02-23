@@ -12,8 +12,8 @@ using project_venda_api.Data.Context;
 namespace project_venda_api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260217195423_Titulos")]
-    partial class Titulos
+    [Migration("20260223132230_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,11 +25,89 @@ namespace project_venda_api.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("project_venda_api.Models.Cedente", b =>
+            modelBuilder.Entity("project_venda_api.Models.Cliente", b =>
                 {
-                    b.Property<Guid?>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Bairro")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<long?>("Celular")
+                        .HasColumnType("bigint");
+
+                    b.Property<int?>("CelularDdd")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Cep")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("varchar(8)");
+
+                    b.Property<string>("Cidade")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Complemento")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("CpfCnpj")
+                        .IsRequired()
+                        .HasMaxLength(14)
+                        .HasColumnType("varchar(14)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)");
+
+                    b.Property<string>("Logradouro")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)");
+
+                    b.Property<string>("Numero")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<string>("RazaoSocial")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)");
+
+                    b.Property<long?>("Telefone")
+                        .HasColumnType("bigint");
+
+                    b.Property<int?>("TelefoneDdd")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TipoPessoa")
+                        .IsRequired()
+                        .HasMaxLength(1)
+                        .HasColumnType("char(1)");
+
+                    b.Property<string>("Uf")
+                        .IsRequired()
+                        .HasMaxLength(2)
+                        .HasColumnType("char(2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Clientes");
+                });
+
+            modelBuilder.Entity("project_venda_api.Models.Empresa", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Agencia")
                         .IsRequired()
@@ -101,65 +179,7 @@ namespace project_venda_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cedentes");
-                });
-
-            modelBuilder.Entity("project_venda_api.Models.Cliente", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Celular")
-                        .IsRequired()
-                        .HasColumnType("varchar(20)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("varchar(150)");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasColumnType("varchar(150)");
-
-                    b.Property<string>("Telefone")
-                        .IsRequired()
-                        .HasColumnType("varchar(20)");
-
-                    b.Property<int>("TipoCliente")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Clientes");
-                });
-
-            modelBuilder.Entity("project_venda_api.Models.Influenciador", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
-
-                    b.Property<string>("Celular")
-                        .IsRequired()
-                        .HasColumnType("varchar(20)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("varchar(150)");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasColumnType("varchar(150)");
-
-                    b.Property<string>("Telefone")
-                        .IsRequired()
-                        .HasColumnType("varchar(20)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Influenciadores");
+                    b.ToTable("Empresas");
                 });
 
             modelBuilder.Entity("project_venda_api.Models.Pedido", b =>
@@ -170,8 +190,8 @@ namespace project_venda_api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ClienteId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ClienteId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DataPedido")
                         .HasColumnType("datetime2");
@@ -195,13 +215,10 @@ namespace project_venda_api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("IdPedido")
-                        .HasColumnType("int");
-
                     b.Property<int>("IdProduto")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PedidoId")
+                    b.Property<int>("PedidoId")
                         .HasColumnType("int");
 
                     b.Property<string>("ProdutoNome")
@@ -315,14 +332,14 @@ namespace project_venda_api.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(5)");
 
-                    b.Property<Guid>("CedenteId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("DataDocumento")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DataProcessamento")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("EmpresaId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Especie")
                         .IsRequired()
@@ -365,25 +382,55 @@ namespace project_venda_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CedenteId");
+                    b.HasIndex("EmpresaId");
 
                     b.HasIndex("SacadoId");
 
                     b.ToTable("Titulos");
                 });
 
+            modelBuilder.Entity("project_venda_api.Models.Vendedor", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+
+                    b.Property<string>("Celular")
+                        .IsRequired()
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("varchar(150)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("varchar(150)");
+
+                    b.Property<string>("Telefone")
+                        .IsRequired()
+                        .HasColumnType("varchar(20)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Vendedores");
+                });
+
             modelBuilder.Entity("project_venda_api.Models.PedidoItem", b =>
                 {
                     b.HasOne("project_venda_api.Models.Pedido", null)
                         .WithMany("Itens")
-                        .HasForeignKey("PedidoId");
+                        .HasForeignKey("PedidoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("project_venda_api.Models.Titulo", b =>
                 {
-                    b.HasOne("project_venda_api.Models.Cedente", "Cedente")
+                    b.HasOne("project_venda_api.Models.Empresa", "Cedente")
                         .WithMany()
-                        .HasForeignKey("CedenteId")
+                        .HasForeignKey("EmpresaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

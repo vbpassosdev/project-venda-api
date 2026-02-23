@@ -16,7 +16,7 @@ namespace project_venda_api.Models
         public int Id { get; set; }
 
         [Required]
-        public int ClienteId { get; private set; }
+        public Guid ClienteId { get; private set; }
 
         public DateTime DataPedido { get; private set; } = DateTime.UtcNow;
 
@@ -32,7 +32,7 @@ namespace project_venda_api.Models
         // CONSTRUTOR
         // ========================
 
-        public Pedido(int clienteId)
+        public Pedido(Guid clienteId)
         {
             ClienteId = clienteId;
         }

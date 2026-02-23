@@ -5,7 +5,7 @@
 namespace project_venda_api.Migrations
 {
     /// <inheritdoc />
-    public partial class addBoleto : Migration
+    public partial class Empresa : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

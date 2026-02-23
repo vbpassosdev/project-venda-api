@@ -10,8 +10,8 @@ namespace project_venda_api.Models
 
         // Relacionamentos
         [Required]
-        public Guid CedenteId { get; set; }
-        public Cedente Cedente { get; set; } = null!;
+        public int EmpresaId { get; set; }
+        public Empresa Cedente { get; set; } = null!;
 
         [Required]
         public Guid SacadoId { get; set; }

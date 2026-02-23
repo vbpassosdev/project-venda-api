@@ -16,6 +16,27 @@ namespace project_venda_api.Controllers
             _context = context;
         }
 
+        [HttpGet("search")]
+        public async Task<IActionResult> GetClientes(string? nome)
+        {
+            var query = _context.Clientes.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(nome))
+            {
+                query = query.Where(c => c.RazaoSocial.Contains(nome));
+            }
+
+            var clientes = await query
+                .Select(c => new {
+                    id = c.Id,
+                    nome = c.RazaoSocial
+                })
+                .Take(20) // 👈 limita para performance
+                .ToListAsync();
+
+            return Ok(clientes);
+        }
+
         // 🔹 GET: api/clientes
         [HttpGet]
         public async Task<IActionResult> GetAll()
@@ -58,11 +79,11 @@ namespace project_venda_api.Controllers
             if (cliente == null)
                 return NotFound();
 
-            cliente.Nome = dto.Nome;
+            cliente.RazaoSocial = dto.RazaoSocial;
             cliente.Email = dto.Email;
             cliente.Telefone = dto.Telefone;
             cliente.Celular = dto.Celular;
-            cliente.TipoCliente = dto.TipoCliente;
+            cliente.TipoPessoa = dto.TipoPessoa;
 
             await _context.SaveChangesAsync();
             return NoContent();

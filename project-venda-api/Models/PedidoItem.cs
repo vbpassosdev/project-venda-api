@@ -9,22 +9,22 @@ namespace project_venda_api.Models
         public int Id { get; set; }
 
         [Required]
-        public int IdPedido { get; set; }
+        public int PedidoId { get; set; }
 
         [Required]
-        public int IdProduto { get; set; }
+        public int IdProduto { get; private set; }
 
         [Required]
         [StringLength(200)]
         public string ProdutoNome { get; private set; } = string.Empty;
 
         [Required]
-        [Range(1, int.MaxValue, ErrorMessage = "Quantidade deve ser maior que zero")]
+        [Range(1, int.MaxValue)]
         public int Quantidade { get; private set; }
 
         [Required]
         [Column(TypeName = "decimal(18,2)")]
-        [Range(0.01, double.MaxValue, ErrorMessage = "Valor unitário deve ser maior que zero")]
+        [Range(0.01, double.MaxValue)]
         public decimal ValorUnitario { get; private set; }
 
         [NotMapped]
@@ -36,12 +36,15 @@ namespace project_venda_api.Models
 
         public PedidoItem(int idProduto, string produtoNome, int quantidade, decimal valorUnitario)
         {
+            IdProduto = idProduto;
+
             AlterarProduto(produtoNome);
             AlterarQuantidade(quantidade);
             AlterarValorUnitario(valorUnitario);
-
-            IdProduto = idProduto;
         }
+
+        // Construtor vazio para EF
+        protected PedidoItem() { }
 
         // ========================
         // REGRAS DE NEGÓCIO

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace project_venda_api.Models
 {
-    public class Influenciador
+    public class Vendedor
     {
         [Key]
         public Guid Id { get; set; }

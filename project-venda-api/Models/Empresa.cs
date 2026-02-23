@@ -3,10 +3,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace project_venda_api.Models
 {
-    public class Cedente
+    public class Empresa
     {
         [Key]
-        public Guid? Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // ✅ ID gerado pelo banco
+        public int Id { get; set; }
 
         // =============================
         // Dados básicos

@@ -47,12 +47,17 @@ namespace project_venda_api.Controllers
 
             try
             {
-                var pdf = _service.GerarBoleto(tituloId);
+                var caminho = _service.GerarBoleto(tituloId);
+
+                var nomeArquivo = Path.GetFileName(caminho);
+
+                var url = $"{Request.Scheme}://{Request.Host}/boletos/{nomeArquivo}";
 
                 return Ok(new
                 {
                     sucesso = true,
-                    pdfUrl = pdf
+                    caminho = caminho,
+                    pdfUrl = url
                 });
             }
             catch (Exception ex)

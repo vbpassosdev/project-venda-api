@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using project_venda_api.Data.Context;
 using project_venda_api.Services; // IMPORTANTE
 
@@ -45,4 +46,20 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 app.UseCors("AllowFrontend");
+
+var pastaBoletos = @"C:\cnesistemas\Boletos";
+
+// Garante que a pasta existe
+if (!Directory.Exists(pastaBoletos))
+{
+    Directory.CreateDirectory(pastaBoletos);
+}
+
+// Depois configura os arquivos estáticos
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(pastaBoletos),
+    RequestPath = "/boletos"
+});
+
 app.Run();
