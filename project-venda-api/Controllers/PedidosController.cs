@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using project_venda_api.Data.Context;
 using project_venda_api.Dto;
 using project_venda_api.Models;
+using project_venda_api.Models.Enums;
 
 namespace project_venda_api.Controllers
 {
@@ -17,22 +18,31 @@ namespace project_venda_api.Controllers
             _context = context;
         }
 
-        // ✅ LISTAR TODOS
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var pedidos = await _context.Pedidos
-                .Include(p => p.Itens)
+                .Include(p => p.Cliente)
                 .ToListAsync();
 
-            return Ok(pedidos);
+            var resultado = pedidos.Select(p => new PedidoListDto
+            {
+                Id = p.Id,
+                ClienteNome = p.Cliente != null ? p.Cliente.RazaoSocial : "",
+                DataPedido = p.DataPedido,
+                ValorTotal = p.ValorTotal,
+                Status = p.Status.ToString(),
+                StatusDescricao = p.Status.GetDescription()
+            });
+
+            return Ok(resultado);
         }
 
-        // ✅ BUSCAR POR ID
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             var pedido = await _context.Pedidos
+                .Include(p => p.Cliente)
                 .Include(p => p.Itens)
                 .FirstOrDefaultAsync(p => p.Id == id);
 
@@ -77,8 +87,8 @@ namespace project_venda_api.Controllers
             if (pedido == null)
                 return NotFound();
 
-            if (pedido.Status != StatusPedido.Pendente)
-                return BadRequest("Somente pedidos pendentes podem ser alterados.");
+            if (pedido.Status == PedidoStatus.Novo || pedido.Status == PedidoStatus.Liberado)
+                return BadRequest("Somente pedidos Novo/Liberado podem ser alterados.");
 
             // Remove itens antigos
             foreach (var item in pedido.Itens.ToList())
@@ -104,6 +114,4 @@ namespace project_venda_api.Controllers
             return Ok(pedido);
         }
     }
-
-
 }
