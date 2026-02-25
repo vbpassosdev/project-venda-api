@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using project_venda_api.Data.Context;
+using project_venda_api.Service;
 using project_venda_api.Services; // IMPORTANTE
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,7 +12,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     )
 );
 
-builder.Services.AddCors(options =>
+/*builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend",
         policy =>
@@ -20,6 +21,19 @@ builder.Services.AddCors(options =>
                 .WithOrigins("http://localhost:3000")
                 .AllowAnyHeader()
                 .AllowAnyMethod();
+        });
+});*/
+
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        policy =>
+        {
+            policy
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
         });
 });
 
@@ -30,11 +44,14 @@ builder.Services.AddSwaggerGen();
 
 //registrar a classe
 builder.Services.AddScoped<BoletoService>();
+builder.Services.AddScoped<NFSeService>();
 
 Console.WriteLine("Base Directory:");
 Console.WriteLine(AppContext.BaseDirectory);
 
 var app = builder.Build();
+
+app.UseCors("AllowAll");
 
 if (app.Environment.IsDevelopment())
 {
@@ -45,7 +62,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
-app.UseCors("AllowFrontend");
+//app.UseCors("AllowFrontend");
 
 var pastaBoletos = @"C:\cnesistemas\Boletos";
 

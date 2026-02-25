@@ -18,7 +18,7 @@ namespace project_venda_api.Data.Context
         public DbSet<Titulo> Titulos { get; set; }
         public DbSet<Empresa> Empresas { get; set; }
         public DbSet<Sacado> Sacados { get; set; }
-
+       
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Vendedor>()
